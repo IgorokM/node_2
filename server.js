@@ -1,25 +1,26 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 
 const port = 8580;
+const pathToStatic = `${__dirname}/view`;
 
-function Home(req, res) {
-    res.send('Home');
-}
+app.use(bodyParser.json());
+
+app.use(express.static(pathToStatic));
 
 function Question(req, res) {
-res.send('Question');
+    
 }
 
 function Analytic(req, res) {
-    res.send('Analytic');
+    
 }
 
 function Answer(req, res) {
-    res.send('Ansvare');
+    res.send(req.body.answer);
 }
 
-app.get('/', Home);
 app.get('/variants', Question);
 app.post('/stat', Analytic);
 app.post('/vote', Answer);
