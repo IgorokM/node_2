@@ -8,7 +8,7 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>Home</title>
+    <title>Голосование</title>
 </head>
 
 <body>
@@ -16,17 +16,18 @@
         <h1 class="text-center w-100">Приветствую, Вы На Голосовании</h1>
     </nav>
     <div class="container">
-        <div class="card text-center">
+        <div class="card text-center" id="container-event">
             <div class="card-header">
                 Кто Автор Книги Капитал?
             </div>
-            <div class="card-body" id="container-event">
+            <div class="card-body">
                 <button id="1" class="btn btn-info">Карл</button>
                 <button id="2" class="btn btn-info">Маркс</button>
             </div>
             <div class="card-footer text-muted">
-                <button class="btn btn-primary">Результаты:</button>
-                <span></span>
+                <button id="stat" class="btn btn-primary">Обновить Статистику Результатов</button>
+                <p>Карл</p><progress id="karl" max="100" value="0"></progress>
+                <p>Маркс</p><progress id="marks" max="100" value="0"></progress>
             </div>
         </div>
     </div>
