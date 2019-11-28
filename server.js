@@ -5,7 +5,11 @@ const util = require('util');
 const app = express();
 const port = 8580;
 const pathToStatic = `${__dirname}/view`;
-const dbConnect = { user: 'node', password: '1234', database: 'node_2' };
+const dbConnect = {
+    user: 'node',
+    password: '1234',
+    database: 'node_2'
+};
 
 
 app.use(bodyParser.json());
@@ -37,55 +41,80 @@ function Db(config) {
     };
 }
 
-function Question(req, res) {
+async function selectToMysql(query) {
     let db = null;
+    let result = null;
     try {
         db = Db(dbConnect);
-        res.send(await db.query(`SELECT name FROM answer`));
+        result = await db.query(query);
     } catch (e) {
-        res.status(400).send({ error: e.message, code: e.code });
-    }
-    finally {
-        db.close();
-    }
-    db = null;
-}
-
-async function Analytic(req, res) {
-    let db = null;
-    try {
-        db = Db(dbConnect);
-        res.send(await db.query(`SELECT name, count FROM answer`));
-    } catch (e) {
-        res.status(400).send({ error: e.message, code: e.code });
+        result = {
+            error: e.message,
+            code: e.code
+        };
     } finally {
         db.close();
     }
     db = null;
+    return result;
 }
 
-async function Answer(req, res) {
+async function updateInsertToMysql(query) {
     let db = null;
+    let result = null;
     try {
         db = Db(dbConnect);
         await db.beginTransaction();
-        const answer = req.body.answer;
-        const data = await db.query(`SELECT count FROM answer WHERE name = ${answer}`);
-        const count = ++data[0].count;
-        const resuilt = await db.query(`UPDATE answer SET count = ${count} WHERE name = ${answer}`);
+        result = await db.query(query);
         db.commit();
-        if (resuilt.changedRows) {
-            res.send({ name: answer, result: true });
-        } else {
-            res.send({ name: answer, result: false });
-        }
     } catch (e) {
         db.rollback();
-        res.status(400).send({ error: e.message, code: e.code });
+        result = {
+            error: e.message,
+            code: e.code
+        };
     } finally {
         db.close();
     }
     db = null;
+    return result;
+}
+
+
+async function Question(req, res) {
+    const data = await selectToMysql('SELECT name FROM answer');
+    if (data.hasOwnProperty('error')) {
+        res.status(400).send(data);
+    } else {
+        res.send(data);
+    }
+
+}
+
+async function Analytic(req, res) {
+    const data = await selectToMysql('SELECT name, count FROM answer');
+    if (data.hasOwnProperty('error')) {
+        res.status(400).send(data);
+    } else {
+        res.send(data);
+    }
+}
+
+async function Answer(req, res) {
+    const answer = req.body.answer;
+    let data = await selectToMysql(`SELECT count FROM answer WHERE name = '${answer}'`);
+    console.log(data);
+    const count = ++data[0].count;
+    const result = {
+        count: 0,
+        result: false
+    };
+    data = await updateInsertToMysql(`UPDATE answer SET count = ${count} WHERE name = '${answer}'`);
+    if (data.changedRows) {
+        result.count = count;
+        result.result = true;
+    }
+    res.send(result);
 }
 
 app.get('/variants', Question);
