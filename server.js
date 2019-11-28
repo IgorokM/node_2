@@ -37,20 +37,28 @@ function Db(config) {
     };
 }
 
-// function Question(req, res) {
-
-// }
+function Question(req, res) {
+    let db = null;
+    try {
+        db = Db(dbConnect);
+        res.send(await db.query(`SELECT name FROM answer`));
+    } catch (e) {
+        res.status(400).send({ error: e.message, code: e.code });
+    }
+    finally {
+        db.close();
+    }
+    db = null;
+}
 
 async function Analytic(req, res) {
     let db = null;
     try {
         db = Db(dbConnect);
-        await db.beginTransaction();
         res.send(await db.query(`SELECT name, count FROM answer`));
     } catch (e) {
-        db.rollback();
         res.status(400).send({ error: e.message, code: e.code });
-    }finally{
+    } finally {
         db.close();
     }
     db = null;
@@ -80,7 +88,7 @@ async function Answer(req, res) {
     db = null;
 }
 
-//app.get('/variants', Question);
+app.get('/variants', Question);
 app.post('/stat', Analytic);
 app.post('/vote', Answer);
 app.listen(port);
