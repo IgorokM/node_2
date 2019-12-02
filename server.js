@@ -100,6 +100,18 @@ async function Analytic(req, res) {
     }
 }
 
+async function DownloadAnalytic(req, res){
+    //res.send(req.accepts('application/xml'));
+    const data = await selectToMysql('SELECT name, count FROM answer');
+    if (data.hasOwnProperty('error')) {
+        res.status(400).send(data);
+    } else {
+        res.set('Content-Type', req.headers.accept);
+        res.set('Content-Disposition', 'attachment; filename=stat');
+        res.send(data);
+    }
+}
+
 async function Answer(req, res) {
     const answer = req.body.answer;
     let data = await selectToMysql(`SELECT count FROM answer WHERE name = '${answer}'`);
@@ -118,6 +130,7 @@ async function Answer(req, res) {
 }
 
 app.get('/variants', Question);
+app.get('/dowloadStat', DownloadAnalytic);
 app.post('/stat', Analytic);
 app.post('/vote', Answer);
 app.listen(port);

@@ -1,4 +1,6 @@
 const containerEvents = document.getElementById('container-event');
+const containerDownload = document.getElementById('download');
+
 const params = {
     headers: {
         'Content-Type': 'application/json'
@@ -7,9 +9,10 @@ const params = {
     body: null
 };
 
-if (containerEvents) containerEvents.addEventListener('click', hendler);
+if (containerEvents) containerEvents.addEventListener('click', handler);
+if (containerDownload) containerDownload.addEventListener('click', handlerDownload);
 
-async function hendler(event) {
+async function handler(event) {
     const target = event.target;
     if (target && target.tagName === 'BUTTON') {
         try {
@@ -37,6 +40,18 @@ async function hendler(event) {
     }
 }
 
+async function handlerDownload(event) {
+    const target = event.target;
+    if (target.tagName === 'BUTTON') {
+        const accept = target.dataset.accept;
+        let data = await fetch('/dowloadStat', {
+            headers: {
+                Accept: accept
+            }
+        });
+        console.log(await data.text())
+    }
+}
 
 (async function () {
     try {
@@ -67,7 +82,6 @@ async function hendler(event) {
             for (let stat of data) {
                 let progress = document.getElementById(`${stat.name}-progress`);
                 if (progress) {
-                    console.log(progress);
                     progress.value = stat.count;
                 }
             }
