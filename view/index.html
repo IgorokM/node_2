@@ -16,20 +16,26 @@
             <h1 class="text-center w-100">Приветствую, Вы На Голосовании</h1>
         </nav>
         <div class="container">
-            <div class="card text-center" id="container-event">
-                <div class="card-header">
-                    Кто Автор Книги Капитал?
-                </div>
-                <div class="card-body d-flex justify-content-around" id="actions"></div>
-                <div class="card-footer text-muted">
-                    <p>Карл</p><progress id="karl-progress" max="100" value="0"></progress>
-                    <p>Маркс</p><progress id="marks-progress" max="100" value="0"></progress>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card text-center" id="container-event">
+                        <div class="card-header">
+                            Кто Автор Книги Капитал?
+                        </div>
+                        <div class="card-body d-flex justify-content-around" id="actions"></div>
+                        <div class="card-footer text-muted">
+                            <p>Карл</p><progress id="karl-progress" max="100" value="0"></progress>
+                            <p>Маркс</p><progress id="marks-progress" max="100" value="0"></progress>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <button class="btn">XML</button>
-                <button class="btn">HTML</button>
-                <button class="btn">JSON</button>
+                <div id="download" class="col-12 d-flex justify-content-around">
+                    <button class="btn">XML</button>
+                    <button class="btn">HTML</button>
+                    <button class="btn">JSON</button>
+                </div>
             </div>
         </div>
     </body>
