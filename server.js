@@ -106,9 +106,9 @@ async function DownloadAnalytic(req, res){
     if (data.hasOwnProperty('error')) {
         res.status(400).send(data);
     } else {
-        res.set('Content-Type', req.headers.accept);
-        res.set('Content-Disposition', 'attachment; filename=stat');
-        res.send(data);
+        res.set('Content-Type',req.headers.accept);
+        res.set('Content-Disposition' ,'attachment; filename=name');
+        res.send('sbfvgf');
     }
 }
 

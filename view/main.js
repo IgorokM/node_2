@@ -49,7 +49,8 @@ async function handlerDownload(event) {
                 Accept: accept
             }
         });
-        console.log(await data.text())
+        data = await data.blob();
+        
     }
 }
 
