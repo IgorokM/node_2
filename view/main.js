@@ -1,5 +1,4 @@
 const containerEvents = document.getElementById('container-event');
-const containerDownload = document.getElementById('download');
 
 const params = {
     headers: {
@@ -10,7 +9,6 @@ const params = {
 };
 
 if (containerEvents) containerEvents.addEventListener('click', handler);
-if (containerDownload) containerDownload.addEventListener('click', handlerDownload);
 
 async function handler(event) {
     const target = event.target;
@@ -37,20 +35,6 @@ async function handler(event) {
         } catch (e) {
             console.error(e.message);
         }
-    }
-}
-
-async function handlerDownload(event) {
-    const target = event.target;
-    if (target.tagName === 'BUTTON') {
-        const accept = target.dataset.accept;
-        let data = await fetch('/dowloadStat', {
-            headers: {
-                Accept: accept
-            }
-        });
-        data = await data.blob();
-        
     }
 }
 

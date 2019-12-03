@@ -32,9 +32,18 @@
             </div>
             <div class="row">
                 <div id="download" class="col-12 d-flex justify-content-around">
-                    <button class="btn" data-accept="application/xml">XML</button>
-                    <button class="btn" data-accept="text/html">HTML</button>
-                    <button class="btn" data-accept="application/json">JSON</button>
+                    <form action="/dowloadStat" method="POST" encrypt="multipart/form-data">
+                        <input type="hidden" name="accept" , value="application/xml">
+                        <button class="btn" type="submit">XML</button>
+                    </form>
+                    <form action="/dowloadStat" method="POST" encrypt="multipart/form-data">
+                        <input type="hidden" name="accept" , value="text/html">
+                        <button class="btn" data-accept="text/html">HTML</button>
+                    </form>
+                    <form action="/dowloadStat" method="POST" encrypt="multipart/form-data">
+                        <input type="hidden" name="accept" , value="application/json">
+                        <button class="btn" data-accept="application/json">JSON</button>
+                    </form>
                 </div>
             </div>
         </div>

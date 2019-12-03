@@ -13,6 +13,7 @@ const dbConnect = {
 
 
 app.use(bodyParser.json());
+app.use(express.urlencoded());
 app.use(express.static(pathToStatic));
 
 
@@ -100,15 +101,39 @@ async function Analytic(req, res) {
     }
 }
 
-async function DownloadAnalytic(req, res){
-    //res.send(req.accepts('application/xml'));
+async function DownloadAnalytic(req, res) {
     const data = await selectToMysql('SELECT name, count FROM answer');
+    let result = '';
     if (data.hasOwnProperty('error')) {
         res.status(400).send(data);
     } else {
-        res.set('Content-Type',req.headers.accept);
-        res.set('Content-Disposition' ,'attachment; filename=name');
-        res.send('sbfvgf');
+        const accept = req.body.accept;
+        switch (accept) {
+            case 'text/html':
+                if (Array.isArray(data)) {
+                    res.set('Content-Type', 'text/html');
+                    for (let row of data) {
+                        result += `<p style="color:white;background-color:black;font-size:3rem">${row.name}: <span style="color:red">${row.count}</span></p>`
+                    }
+                }
+                break;
+            case 'application/xml':
+                result = '<data>';
+                res.set('Content-Type', 'application/xml');
+                if (Array.isArray(data)) {
+                    for (let row of data) {
+                        result += `<name>${row.name}:</name><count>${row.count}</count>`;
+                    }
+                }
+                result += '</data>';
+                break;
+            case 'application/json':
+                res.set('Content-Type', 'application/json');
+                result = data;
+            break;
+        }
+        res.set('Content-Disposition', 'attachment;');
+        res.send(result);
     }
 }
 
@@ -130,7 +155,7 @@ async function Answer(req, res) {
 }
 
 app.get('/variants', Question);
-app.get('/dowloadStat', DownloadAnalytic);
+app.post('/dowloadStat', DownloadAnalytic);
 app.post('/stat', Analytic);
 app.post('/vote', Answer);
 app.listen(port);
