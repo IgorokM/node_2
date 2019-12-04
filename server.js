@@ -11,9 +11,10 @@ const dbConnect = {
     database: 'node_2'
 };
 
-
 app.use(bodyParser.json());
-app.use(express.urlencoded());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(express.static(pathToStatic));
 
 
@@ -130,7 +131,7 @@ async function DownloadAnalytic(req, res) {
             case 'application/json':
                 res.set('Content-Type', 'application/json');
                 result = data;
-            break;
+                break;
         }
         res.set('Content-Disposition', 'attachment;');
         res.send(result);
