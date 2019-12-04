@@ -140,7 +140,6 @@ async function DownloadAnalytic(req, res) {
 async function Answer(req, res) {
     const answer = req.body.answer;
     let data = await selectToMysql(`SELECT count FROM answer WHERE name = '${answer}'`);
-    console.log(data);
     const count = ++data[0].count;
     const result = {
         count: 0,
@@ -156,6 +155,6 @@ async function Answer(req, res) {
 
 app.get('/variants', Question);
 app.post('/dowloadStat', DownloadAnalytic);
-app.post('/stat', Analytic);
+app.get('/stat', Analytic);
 app.post('/vote', Answer);
 app.listen(port);

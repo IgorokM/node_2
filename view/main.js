@@ -22,7 +22,7 @@ async function handler(event) {
                 data = await data.json();
                 if (data.hasOwnProperty('result') && data.result) alert('Ваш голос принят');
             }
-            let data = await fetch('/stat', params);
+            let data = await fetch('/stat');
             data = await data.json();
             if (Array.isArray(data)) {
                 for (let obj of data) {
@@ -61,7 +61,7 @@ async function handler(event) {
         }
         data = null;
 
-        data = await fetch('/stat', params);
+        data = await fetch('/stat');
         data = await data.json();
         if (Array.isArray(data)) {
             for (let stat of data) {
